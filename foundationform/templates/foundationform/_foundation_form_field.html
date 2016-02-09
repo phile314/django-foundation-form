@@ -1,4 +1,6 @@
-<div class="row{% if field.errors %} error{% endif %}">
+{% load foundation_helper %}
+
+<div class="row">
     {% if inline %}
         <div class="large-3 columns">
             <label for="{{ field.auto_id }}" class="right inline">
@@ -13,13 +15,19 @@
         </div>
     {% else %}
         <div class="large-12 columns">
-            <label>
+            <label {% if field.errors %}class="is-invalid-label"{% endif %} >
                 {{ field.label }}
+                {% if field.errors %}
+                {{ field|addclass:"is-invalid-input" }}
+                  <span class="form-error is-visible">
+                  {% for error in field.errors %}
+                    <small{% if field.errors %} class="error"{% endif %}>{{ error|escape }}</small>
+                  {% endfor %}
+                  </span>
+                {% else %}
                 {{ field }}
+                {% endif %}
             </label>
-            {% for error in field.errors %}
-                <small{% if field.errors %} class="error"{% endif %}>{{ error|escape }}</small>
-            {% endfor %}
         </div>
     {% endif %}
 </div>

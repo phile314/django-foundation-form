@@ -1,4 +1,3 @@
-from django.template import Context
 from django.template.loader import get_template
 from django.template import Library
 
@@ -11,16 +10,15 @@ def get_context_template(element):
 
     if element_type == 'boundfield':
         template = get_template("foundationform/_foundation_form_field.html")
-        context = Context({'field': element})
+        context = {'field': element}
     else:
         if hasattr(element, 'management_form'):
             template = get_template("foundationform/foundation_formset.html")
-            context = Context({'formset': element})
+            context = {'formset': element}
         else:
             template = get_template("foundationform/foundation_form.html")
-            context = Context({'form': element})
+            context = {'form': element}
     return template, context
-
 
 @register.filter
 def foundation(element):
@@ -31,5 +29,5 @@ def foundation(element):
 @register.filter
 def foundationinline(element):
     template, context = get_context_template(element)
-    context.update({'inline': True})
+    context['inline'] = True
     return template.render(context)
